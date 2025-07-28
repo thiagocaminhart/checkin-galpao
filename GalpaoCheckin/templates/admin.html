@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+
+{% block title %}Painel Admin - Galpão Tênis de Mesa{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>
+                <i class="fas fa-user-cog text-primary"></i>
+                Painel Administrativo
+            </h2>
+            <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Formulário de Cadastro -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-user-plus"></i>
+                    Cadastrar Novo Aluno
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">
+                            <i class="fas fa-user"></i>
+                            Nome Completo *
+                        </label>
+                        <input type="text" class="form-control" id="nome" name="nome" 
+                               required placeholder="Digite o nome completo do aluno">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="pagamento" class="form-label">
+                            <i class="fas fa-credit-card"></i>
+                            Informações de Pagamento *
+                        </label>
+                        <input type="text" class="form-control" id="pagamento" name="pagamento" 
+                               required placeholder="Ex: Mensal - Pago em 15/01/2025">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="creditos" class="form-label">
+                            <i class="fas fa-coins"></i>
+                            Créditos Semanais *
+                        </label>
+                        <input type="number" class="form-control" id="creditos" name="creditos" 
+                               min="0" max="20" required placeholder="Ex: 8">
+                        <div class="form-text">
+                            Número de aulas que o aluno pode reservar por semana
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="senha" class="form-label">
+                            <i class="fas fa-key"></i>
+                            Senha do Aluno
+                        </label>
+                        <input type="text" class="form-control" id="senha" name="senha" 
+                               placeholder="Deixe vazio para gerar automaticamente">
+                        <div class="form-text">
+                            Se não informar, será gerado automaticamente baseado no nome
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg" onclick="return confirm('Confirma o cadastro do aluno?')">
+                            <i class="fas fa-save"></i>
+                            Cadastrar Aluno
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Alunos -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-users"></i>
+                    Alunos Cadastrados
+                    {% if alunos %}
+                        <span class="badge bg-light text-dark">{{ alunos|length }}</span>
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if alunos %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th><i class="fas fa-user"></i> Nome</th>
+                                    <th><i class="fas fa-coins"></i> Créditos</th>
+                                    <th><i class="fas fa-key"></i> Senha</th>
+                                    <th><i class="fas fa-credit-card"></i> Pagamento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for aluno in alunos %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ aluno.nome }}</strong>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-{% if aluno.creditos > 5 %}success{% elif aluno.creditos > 2 %}warning{% else %}danger{% endif %}">
+                                            {{ aluno.creditos }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <code class="text-primary">{{ aluno.senha }}</code>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">{{ aluno.pagamento }}</small>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Nenhum aluno cadastrado ainda.</p>
+                        <p class="small text-muted">Use o formulário ao lado para cadastrar o primeiro aluno.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Resumo de Check-ins -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-calendar-check"></i>
+                    Resumo de Check-ins
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Check-ins de Hoje -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="card border-primary">
+                            <div class="card-header bg-primary text-white">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-calendar-day"></i>
+                                    Hoje - {{ resumo.hoje.data }}
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-center mb-3">
+                                    <h3 class="text-primary">{{ resumo.hoje.total }}</h3>
+                                    <small class="text-muted">Total de Check-ins</small>
+                                </div>
+                                
+                                {% for horario in ["18:00-20:00", "20:00-22:00"] %}
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <strong>{{ horario }}</strong>
+                                        <span class="badge bg-{% if resumo.hoje.por_horario[horario]|length > 8 %}danger{% elif resumo.hoje.por_horario[horario]|length > 4 %}warning{% else %}success{% endif %}">
+                                            {{ resumo.hoje.por_horario[horario]|length }}/12
+                                        </span>
+                                    </div>
+                                    {% if resumo.hoje.por_horario[horario] %}
+                                        <div class="small text-muted">
+                                            {{ resumo.hoje.por_horario[horario]|join(", ") }}
+                                        </div>
+                                    {% else %}
+                                        <div class="small text-muted">Nenhum check-in</div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Check-ins da Semana -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="card border-info">
+                            <div class="card-header bg-info text-white">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-calendar-week"></i>
+                                    Esta Semana - {{ resumo.semana.periodo }}
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-center mb-3">
+                                    <h3 class="text-info">{{ resumo.semana.total }}</h3>
+                                    <small class="text-muted">Total de Check-ins</small>
+                                </div>
+                                
+                                {% if resumo.semana.por_aluno %}
+                                    <h6 class="mb-2">Por Aluno:</h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <tbody>
+                                                {% for nome, quantidade in resumo.semana.por_aluno.items()|sort(attribute=1, reverse=true) %}
+                                                <tr>
+                                                    <td>{{ nome }}</td>
+                                                    <td class="text-end">
+                                                        <span class="badge bg-{% if quantidade > 5 %}success{% elif quantidade > 2 %}warning{% else %}secondary{% endif %}">
+                                                            {{ quantidade }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div class="text-center text-muted">
+                                        <i class="fas fa-calendar-times fa-2x mb-2"></i>
+                                        <p>Nenhum check-in esta semana</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Estatísticas -->
+{% if alunos %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-bar"></i>
+                    Estatísticas Gerais
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <h3 class="text-primary">{{ alunos|length }}</h3>
+                            <small class="text-muted">Total de Alunos</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <h3 class="text-success">{{ alunos|sum(attribute='creditos') }}</h3>
+                            <small class="text-muted">Total de Créditos</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <h3 class="text-info">{{ (alunos|sum(attribute='creditos') / alunos|length)|round(1) if alunos|length > 0 else 0 }}</h3>
+                            <small class="text-muted">Média de Créditos</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="border rounded p-3">
+                            <h3 class="text-warning">{{ resumo.hoje.total + resumo.semana.total }}</h3>
+                            <small class="text-muted">Check-ins Recentes</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

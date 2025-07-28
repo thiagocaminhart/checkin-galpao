@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}{{ nome }} - Galpão Tênis de Mesa{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2>
+                    <i class="fas fa-user-circle text-success"></i>
+                    Olá, {{ nome }}!
+                </h2>
+                <p class="text-muted mb-0">Gerencie suas reservas de tênis de mesa</p>
+            </div>
+            <div class="text-end">
+                <div class="badge bg-{% if creditos > 5 %}success{% elif creditos > 2 %}warning{% else %}danger{% endif %} fs-6 px-3 py-2">
+                    <i class="fas fa-coins"></i>
+                    {{ creditos }} crédito{{ 's' if creditos != 1 else '' }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Data Atual -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="alert alert-info">
+            <i class="fas fa-calendar-day"></i>
+            <strong>Reservas para hoje:</strong> {{ hoje }} ({{ moment(hoje).format('dddd, D [de] MMMM [de] YYYY') if moment else hoje }})
+        </div>
+    </div>
+</div>
+
+<!-- Horários Disponíveis -->
+<div class="row">
+    {% for horario in ["18:00-20:00", "20:00-22:00"] %}
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow {% if status[horario].reservado %}border-success{% elif status[horario].lotado %}border-danger{% else %}border-primary{% endif %}">
+            <div class="card-header {% if status[horario].reservado %}bg-success text-white{% elif status[horario].lotado %}bg-danger text-white{% else %}bg-primary text-white{% endif %}">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clock"></i>
+                        {{ horario }}
+                    </h5>
+                    <span class="badge bg-light text-dark">
+                        {{ status[horario].vagas_restantes }}/12 vagas
+                    </span>
+                </div>
+            </div>
+            
+            <div class="card-body">
+                {% if status[horario].reservado %}
+                    <!-- Usuário já tem reserva -->
+                    <div class="text-center py-3">
+                        <i class="fas fa-check-circle text-success fa-3x mb-3"></i>
+                        <h6 class="text-success">Você tem reserva confirmada!</h6>
+                        <p class="text-muted small mb-3">Sua vaga está garantida para este horário</p>
+                        
+                        {% if pode_cancelar %}
+                        <a href="{{ url_for('cancelar', horario=horario) }}" 
+                           class="btn btn-outline-danger"
+                           onclick="return confirm('Tem certeza que deseja cancelar sua reserva? O crédito será reembolsado.')">
+                            <i class="fas fa-times"></i>
+                            Cancelar Reserva
+                        </a>
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i>
+                                Cancelamento até 15:00h (horário de Brasília)
+                            </small>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-clock"></i>
+                            <small>Cancelamento não permitido após 15:00h (horário de Brasília)</small>
+                        </div>
+                        {% endif %}
+                    </div>
+                
+                {% elif status[horario].lotado %}
+                    <!-- Horário lotado -->
+                    <div class="text-center py-3">
+                        <i class="fas fa-users text-danger fa-3x mb-3"></i>
+                        <h6 class="text-danger">Horário Lotado</h6>
+                        <p class="text-muted small">Todas as 12 vagas estão ocupadas</p>
+                        <button class="btn btn-secondary" disabled>
+                            <i class="fas fa-ban"></i>
+                            Sem Vagas Disponíveis
+                        </button>
+                    </div>
+                
+                {% elif creditos <= 0 %}
+                    <!-- Sem créditos -->
+                    <div class="text-center py-3">
+                        <i class="fas fa-coins text-warning fa-3x mb-3"></i>
+                        <h6 class="text-warning">Sem Créditos</h6>
+                        <p class="text-muted small">Entre em contato com a administração</p>
+                        <button class="btn btn-secondary" disabled>
+                            <i class="fas fa-ban"></i>
+                            Créditos Insuficientes
+                        </button>
+                    </div>
+                
+                {% else %}
+                    <!-- Pode fazer reserva -->
+                    <div class="text-center py-3">
+                        <i class="fas fa-table-tennis text-primary fa-3x mb-3"></i>
+                        <h6 class="text-primary">Vaga Disponível</h6>
+                        <p class="text-muted small mb-3">
+                            {{ status[horario].vagas_restantes }} vaga{{ 's' if status[horario].vagas_restantes != 1 else '' }} restante{{ 's' if status[horario].vagas_restantes != 1 else '' }}
+                        </p>
+                        
+                        <a href="{{ url_for('checkin', horario=horario) }}" 
+                           class="btn btn-primary btn-lg"
+                           onclick="return confirm('Confirma a reserva para o horário {{ horario }}? Será descontado 1 crédito.')">
+                            <i class="fas fa-check"></i>
+                            Fazer Reserva
+                        </a>
+                        
+                        <div class="mt-2">
+                            <small class="text-muted">
+                                <i class="fas fa-coins"></i>
+                                Custa 1 crédito
+                            </small>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Indicador Visual de Ocupação -->
+            <div class="card-footer p-2">
+                <div class="progress" style="height: 8px;">
+                    <div class="progress-bar {% if status[horario].vagas_restantes > 6 %}bg-success{% elif status[horario].vagas_restantes > 3 %}bg-warning{% else %}bg-danger{% endif %}" 
+                         role="progressbar" 
+                         style="width: {{ ((12 - status[horario].vagas_restantes) / 12 * 100)|round }}%">
+                    </div>
+                </div>
+                <div class="text-center mt-1">
+                    <small class="text-muted">
+                        {{ 12 - status[horario].vagas_restantes }}/12 ocupadas
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Informações Adicionais -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card border-info">
+            <div class="card-header bg-info text-white">
+                <h6 class="mb-0">
+                    <i class="fas fa-info-circle"></i>
+                    Regras Importantes
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success"></i>
+                                Reservas podem ser feitas até o horário de início
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-clock text-warning"></i>
+                                Cancelamentos permitidos até 15:00h (horário de Brasília)
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="fas fa-coins text-info"></i>
+                                Créditos são reembolsados no cancelamento
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-users text-primary"></i>
+                                Máximo de 12 alunos por horário
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+GALPÃO TÊNIS DE MESA - SISTEMA DE CHECK-IN
+==========================================
+
+DESCRIÇÃO:
+Sistema web Flask para gestão de reservas de tênis de mesa com:
+- Interface dupla: alunos e administradores
+- Sistema de créditos para reservas
+- Horários: 18:00-20:00 e 20:00-22:00
+- Cancelamento até 15:00h (horário de Brasília)
+- Banco PostgreSQL
+
+ARQUIVOS PRINCIPAIS:
+- main.py: Aplicação Flask principal
+- models.py: Modelos do banco de dados
+- templates/: Templates HTML (Jinja2)
+- static/: CSS e JavaScript
+- pyproject.toml: Dependências Python
+
+INSTALAÇÃO:
+1. Instale Python 3.11+ e PostgreSQL
+2. Instale dependências: pip install -r requirements.txt
+3. Configure DATABASE_URL no ambiente
+4. Execute: python main.py
+
+CONFIGURAÇÃO:
+- Senha admin: "bolinha"
+- Senhas de alunos: baseadas no nome (ex: "thiago" para Thiago)
+- Limite: 12 alunos por horário
+- Cancelamento: até 15:00h Brasil
+
+ACESSO:
+- Alunos: Nome + senha para reservar horários
+- Admin: Senha "bolinha" para gerenciar sistema
+- Timezone: Brasil (GMT-3) para cancelamentos
+
+FUNCIONALIDADES:
+✓ Login dual (aluno/admin)
+✓ Sistema de créditos
+✓ Reservas com limite de vagas
+✓ Cancelamento com reembolso
+✓ Relatórios administrativos
+✓ Interface responsiva (Bootstrap)
+
+Desenvolvido em Flask com PostgreSQL
+© 2025 Galpão Tênis de Mesa

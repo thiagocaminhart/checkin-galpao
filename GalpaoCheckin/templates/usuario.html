@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Login Aluno - Galpão Tênis de Mesa{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-lg">
+            <div class="card-header bg-success text-white text-center">
+                <h4 class="mb-0">
+                    <i class="fas fa-user"></i>
+                    Login do Aluno
+                </h4>
+            </div>
+            
+            <div class="card-body p-4">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">
+                            <i class="fas fa-user"></i>
+                            Nome Completo
+                        </label>
+                        <input type="text" class="form-control form-control-lg" id="nome" 
+                               name="nome" required placeholder="Digite seu nome completo"
+                               autocomplete="name">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="senha" class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Senha
+                        </label>
+                        <input type="password" class="form-control form-control-lg" id="senha" 
+                               name="senha" required placeholder="Digite sua senha"
+                               autocomplete="current-password">
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Entrar no Sistema
+                        </button>
+                        
+                        <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i>
+                            Voltar
+                        </a>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="card-footer bg-light text-center">
+                <small class="text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    Não tem cadastro? Entre em contato com a administração.
+                </small>
+            </div>
+        </div>
+
+        <!-- Informações do Sistema -->
+        <div class="card mt-4 border-info">
+            <div class="card-header bg-info text-white text-center">
+                <h6 class="mb-0">
+                    <i class="fas fa-info-circle"></i>
+                    Informações Importantes
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="fas fa-clock text-success"></i>
+                        <strong>Horários:</strong> 18:00-20:00 e 20:00-22:00
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-users text-info"></i>
+                        <strong>Limite:</strong> 12 alunos por horário
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-coins text-warning"></i>
+                        <strong>Sistema:</strong> Créditos semanais
+                    </li>
+                    <li>
+                        <i class="fas fa-ban text-danger"></i>
+                        <strong>Cancelamento:</strong> Até 15:00h do mesmo dia
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

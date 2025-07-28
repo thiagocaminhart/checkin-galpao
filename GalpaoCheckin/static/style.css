@@ -1,0 +1,321 @@
+/* Tema Tênis de Mesa - Cores e Estilos Personalizados */
+
+:root {
+    --primary-color: #1e88e5;
+    --success-color: #43a047;
+    --warning-color: #ffa726;
+    --danger-color: #e53935;
+    --info-color: #26c6da;
+    --dark-color: #37474f;
+    --light-color: #f5f5f5;
+    --table-tennis-orange: #ff6f00;
+    --table-tennis-blue: #0277bd;
+}
+
+/* Body e Layout Geral */
+body {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+
+/* Navegação */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.navbar-brand i {
+    color: var(--table-tennis-orange);
+    margin-right: 8px;
+}
+
+/* Cards */
+.card {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+    font-weight: 600;
+}
+
+/* Botões */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-lg {
+    padding: 12px 24px;
+    font-size: 1.1rem;
+}
+
+/* Tabs personalizadas */
+.nav-tabs {
+    border-bottom: none;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    background: #f8f9fa;
+    color: #6c757d;
+    border-radius: 0;
+    font-weight: 500;
+    padding: 15px 20px;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    background: #e9ecef;
+    color: var(--primary-color);
+}
+
+.nav-tabs .nav-link.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.nav-tabs .nav-link i {
+    margin-right: 8px;
+}
+
+/* Badges personalizados */
+.badge {
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+/* Alertas */
+.alert {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.alert i {
+    margin-right: 8px;
+}
+
+/* Progress bars */
+.progress {
+    border-radius: 10px;
+    background-color: #e9ecef;
+}
+
+.progress-bar {
+    border-radius: 10px;
+}
+
+/* Formulários */
+.form-control {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+    padding: 12px 15px;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(30, 136, 229, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 8px;
+}
+
+.form-label i {
+    margin-right: 8px;
+    color: var(--primary-color);
+}
+
+/* Tabelas */
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: var(--light-color);
+    border: none;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.table tbody tr:hover {
+    background-color: rgba(30, 136, 229, 0.05);
+}
+
+/* Icones especiais */
+.fa-table-tennis {
+    color: var(--table-tennis-orange);
+}
+
+/* Animações */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Estados de vaga */
+.border-success {
+    border-color: var(--success-color) !important;
+    border-width: 2px !important;
+}
+
+.border-danger {
+    border-color: var(--danger-color) !important;
+    border-width: 2px !important;
+}
+
+.border-primary {
+    border-color: var(--primary-color) !important;
+    border-width: 2px !important;
+}
+
+.border-info {
+    border-color: var(--info-color) !important;
+    border-width: 2px !important;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .btn-lg {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+}
+
+/* Efeitos hover para cards de horário */
+.card:hover .fa-table-tennis,
+.card:hover .fa-check-circle,
+.card:hover .fa-users,
+.card:hover .fa-coins {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+
+/* Loading states */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #1976d2;
+}
+
+/* Status indicators */
+.status-available {
+    color: var(--success-color);
+}
+
+.status-full {
+    color: var(--danger-color);
+}
+
+.status-reserved {
+    color: var(--primary-color);
+}
+
+/* Info boxes */
+.info-box {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.info-box i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.info-box h6 {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+/* Utility classes */
+.text-table-tennis {
+    color: var(--table-tennis-orange) !important;
+}
+
+.bg-table-tennis {
+    background-color: var(--table-tennis-orange) !important;
+}
+
+.shadow-custom {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+/* Print styles */
+@media print {
+    .navbar,
+    .btn,
+    footer {
+        display: none !important;
+    }
+    
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #dee2e6 !important;
+    }
+}
